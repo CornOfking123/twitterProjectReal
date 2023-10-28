@@ -1,4 +1,6 @@
+import { resolve4 } from 'dns'
 import jwt from 'jsonwebtoken'
+import { TokenPayload } from '~/models/requests/User.requests'
 
 // làm hàm nhận vào payload, privateKey, options từ đó kí tên
 
@@ -15,6 +17,22 @@ export const signToken = ({
     jwt.sign(payload, privateKey, options, (err, token) => {
       if (err) throw reject(err) // reject vì nó phục vụ cho mình
       resolve(token as string)
+    })
+  })
+}
+
+export const verifyToken = ({
+  token,
+  secretOrPublicKey = process.env.JWT_SECRET as string
+}: {
+  token: string
+  secretOrPublicKey?: string
+}) => {
+  return new Promise<TokenPayload>((resolve, reject) => {
+    jwt.verify(token, secretOrPublicKey, (err, decoded) => {
+      //decode là payload
+      if (err) throw reject(err)
+      resolve(decoded as TokenPayload)
     })
   })
 }

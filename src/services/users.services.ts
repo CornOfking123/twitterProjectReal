@@ -6,6 +6,7 @@ import { signToken } from '~/utils/jwt'
 import { TokenType } from '~/constants/enums'
 import { ObjectId } from 'mongodb'
 import RefreshToken from '~/models/schemas/RefeshToken.schema'
+import { USERS_MESSAGES } from '~/constants/messages'
 
 class UsersService {
   // hàm nhận vào user_id vào bỏ vào payload để tạo access_token
@@ -15,7 +16,7 @@ class UsersService {
       options: { expiresIn: process.env.ACCESS_TOKEN_EXPIRE_IN }
     })
   }
-  // hàm nhận vào user_id vào bỏ vào payload để tạo refesh_token
+  // hàm nhận vào user_id vào bỏ vào payload để tạo refresh_token
   private signRefreshToken(user_id: string) {
     return signToken({
       payload: { user_id, token_type: TokenType.RefreshToken },
@@ -39,7 +40,7 @@ class UsersService {
     )
     const user_id = result.insertedId.toString()
     const [access_token, refresh_token] = await this.signAccessTokenAndRefeshToken(user_id)
-    await databaseService.refeshToken.insertOne(
+    await databaseService.refreshTokens.insertOne(
       new RefreshToken({
         token: refresh_token,
         user_id: new ObjectId(user_id)
@@ -49,14 +50,18 @@ class UsersService {
   }
   async login(user_id: string) {
     const [access_token, refresh_token] = await this.signAccessTokenAndRefeshToken(user_id)
-    // lưu refesh_token vào database
-    await databaseService.refeshToken.insertOne(
+    // lưu refresh_token vào database
+    await databaseService.refreshTokens.insertOne(
       new RefreshToken({
         token: refresh_token,
         user_id: new ObjectId(user_id)
       })
     )
     return { access_token, refresh_token }
+  }
+  async logout(refresh_token: string) {
+    await databaseService.refreshTokens.deleteOne({ token: refresh_token })
+    return { message: USERS_MESSAGES.LOGOUT_SUCCESS }
   }
 }
 const usersService = new UsersService()

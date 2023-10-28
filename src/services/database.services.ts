@@ -23,8 +23,8 @@ class DatabaseService {
   get users(): Collection<User> {
     return this.db.collection(`${process.env.DB_USERS_COLLECTION as string}`)
   }
-  get refeshToken(): Collection<RefreshToken> {
-    return this.db.collection(`${process.env.DB_REFESH_TOKENS_COLLECTION as string}`)
+  get refreshTokens(): Collection<RefreshToken> {
+    return this.db.collection(`${process.env.DB_REFRESH_TOKENS_COLLECTION as string}`)
   }
 }
 const databaseService = new DatabaseService()
