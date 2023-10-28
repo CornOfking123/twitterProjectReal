@@ -1,6 +1,7 @@
 import { MongoClient, ServerApiVersion, Db, Collection } from 'mongodb'
 import { config } from 'dotenv'
 import User from '~/models/schemas/User.schema'
+import RefreshToken from '~/models/schemas/RefeshToken.schema'
 config()
 const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@tweetproject.r6i27yh.mongodb.net/?retryWrites=true&w=majority`
 class DatabaseService {
@@ -21,6 +22,9 @@ class DatabaseService {
   }
   get users(): Collection<User> {
     return this.db.collection(`${process.env.DB_USERS_COLLECTION as string}`)
+  }
+  get refeshToken(): Collection<RefreshToken> {
+    return this.db.collection(`${process.env.DB_REFESH_TOKENS_COLLECTION as string}`)
   }
 }
 const databaseService = new DatabaseService()

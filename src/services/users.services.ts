@@ -4,6 +4,8 @@ import { RegisterReqBody } from '~/models/requests/User.requests'
 import { hashPassword } from '~/utils/crypto'
 import { signToken } from '~/utils/jwt'
 import { TokenType } from '~/constants/enums'
+import { ObjectId } from 'mongodb'
+import RefreshToken from '~/models/schemas/RefeshToken.schema'
 
 class UsersService {
   // hàm nhận vào user_id vào bỏ vào payload để tạo access_token
@@ -37,10 +39,23 @@ class UsersService {
     )
     const user_id = result.insertedId.toString()
     const [access_token, refresh_token] = await this.signAccessTokenAndRefeshToken(user_id)
+    await databaseService.refeshToken.insertOne(
+      new RefreshToken({
+        token: refresh_token,
+        user_id: new ObjectId(user_id)
+      })
+    )
     return { access_token, refresh_token }
   }
   async login(user_id: string) {
     const [access_token, refresh_token] = await this.signAccessTokenAndRefeshToken(user_id)
+    // lưu refesh_token vào database
+    await databaseService.refeshToken.insertOne(
+      new RefreshToken({
+        token: refresh_token,
+        user_id: new ObjectId(user_id)
+      })
+    )
     return { access_token, refresh_token }
   }
 }
