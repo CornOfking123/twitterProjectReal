@@ -111,3 +111,18 @@ export const resendEmailVerifyController = async (req: Request, res: Response) =
   //result chứa message nên ta chỉ cần trả  result về cho client
   return res.json(result)
 }
+
+export const forgotPasswordController = async (req: Request, res: Response) => {
+  // lấy user_id từ user của req
+  const { _id } = req.user as User
+  // dùng cái _id tìm và cập nhật lại user thêm vào forgot_password_token
+  const result = await usersService.forgotPassword((_id as ObjectId).toString())
+  return res.json(result)
+}
+
+export const verifyForgotPasswordTokenController = async (req: Request, res: Response) => {
+  return res.json({
+    message: USERS_MESSAGES.VERIFY_FORGOT_PASSWORD_CUCCESS
+    //
+  })
+}

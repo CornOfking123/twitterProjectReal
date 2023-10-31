@@ -1,17 +1,22 @@
 import { Router } from 'express'
+import { wrap } from 'module'
 import {
   emailVerifyTokenController,
+  forgotPasswordController,
   loginController,
   logoutController,
   registerController,
-  resendEmailVerifyController
+  resendEmailVerifyController,
+  verifyForgotPasswordTokenController
 } from '~/controllers/users.controllers'
 import {
   accessTokenValidator,
   emailVerifyTokenValidator,
+  forgotPasswordValidator,
   loginValidator,
   refreshTokenValidator,
-  registerValidator
+  registerValidator,
+  verifyForgotPasswordTokenValidator
 } from '~/middlewares/users.middlewares'
 import { wrapAsync } from '~/utils/handlers'
 const usersRouter = Router()
@@ -42,4 +47,24 @@ path: /users/resend-email-verify-token
 headers: {authorization: "Bearer <access_token>" } // đăng nhập mới dcc resend
 */
 usersRouter.post('/resend-verify-email', accessTokenValidator, wrapAsync(resendEmailVerifyController))
+
+/*
+khi người dùng quên mật khẩu, họ gửi email để xin mình tạo cho họ forgot_password_token
+path: /users/forgot-password
+method: POST
+body: (email: string)
+*/
+usersRouter.post('/forgot-password', forgotPasswordValidator, wrapAsync(forgotPasswordController))
+/*
+khi người dùng nhấp vào link trong email để reset password
+họ sẽ gửi 1 req kèm theo forgot_password_token lên sv
+sv sẽ kiêm3 tra có hợp lệ hay ko
+sau đó chuyển hướng người dùng đến trang reset pswd
+
+*/
+usersRouter.post(
+  '/verify-forgot-password',
+  verifyForgotPasswordTokenValidator,
+  wrapAsync(verifyForgotPasswordTokenController)
+)
 export default usersRouter
