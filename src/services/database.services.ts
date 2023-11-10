@@ -3,7 +3,7 @@ import { config } from 'dotenv'
 import User from '~/models/schemas/User.schema'
 import RefreshToken from '~/models/schemas/RefeshToken.schema'
 config()
-const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@tweetproject.r6i27yh.mongodb.net/?retryWrites=true&w=majority`
+const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@XProject.r6i27yh.mongodb.net/?retryWrites=true&w=majority`
 class DatabaseService {
   private client: MongoClient
   private db: Db
