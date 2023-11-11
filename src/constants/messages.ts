@@ -43,6 +43,8 @@ export const USERS_MESSAGES = {
   FORGOT_PASSWORD_TOKEN_IS_INCORRECT: 'Forgot password token is incorrect',
   VERIFY_FORGOT_PASSWORD_CUCCESS: 'Verify forgot password success',
   RESET_PASSWORD_CUCCESS: 'Reset password success',
+  OLD_PASSWORD_NOT_MATCH: 'Old password not match',
+  CHANGE_PASSWORD_SUCCESS: 'Change password success',
   GET_ME_SUCCESS: 'Get me success',
   USER_NOT_VERIFIED: 'User not verified',
   IMAGE_MUST_BE_A_STRING: 'Image must be a string',
@@ -68,5 +70,6 @@ export const USERS_MESSAGES = {
   FOLLOW_SUCCESS: 'Follow success',
   FOLLOWED: 'Followed',
   ALREADY_UNFOLLOWED: 'Already unfollowed',
-  UNFOLLOW_SUCCESS: 'Unfollow success'
+  UNFOLLOW_SUCCESS: 'Unfollow success',
+  REFRESH_TOKEN_SUCCESS: 'Refresh token success'
 } as const

@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import { wrap } from 'module'
 import {
+  changePasswordController,
   emailVerifyTokenController,
   followController,
   forgotPasswordController,
@@ -8,6 +9,7 @@ import {
   getProfileController,
   loginController,
   logoutController,
+  refreshTokenController,
   registerController,
   resendEmailVerifyController,
   resetPasswordController,
@@ -17,6 +19,7 @@ import {
 } from '~/controllers/users.controllers'
 import {
   accessTokenValidator,
+  changePasswordValidator,
   emailVerifyTokenValidator,
   filterMiddleware,
   followValidator,
@@ -156,5 +159,27 @@ usersRouter.delete(
   unfollowValidator,
   wrapAsync(unfollowController)
 )
-
+/*
+  des: change password
+  path: '/change-password'
+  method: PUT
+  headers: {Authorization: Bearer <access_token>}
+  Body: {old_password: string, password: string, confirm_password: string}
+g}
+  */
+usersRouter.put(
+  '/change-password',
+  accessTokenValidator,
+  verifiedUserValidator,
+  changePasswordValidator,
+  wrapAsync(changePasswordController)
+)
+/*
+  des: refreshtoken
+  path: '/refresh-token'
+  method: POST
+  Body: {refresh_token: string}
+g}
+  */
+usersRouter.post('/refresh-token', refreshTokenValidator, wrapAsync(refreshTokenController))
 export default usersRouter
