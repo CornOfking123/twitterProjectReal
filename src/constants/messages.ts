@@ -71,5 +71,6 @@ export const USERS_MESSAGES = {
   FOLLOWED: 'Followed',
   ALREADY_UNFOLLOWED: 'Already unfollowed',
   UNFOLLOW_SUCCESS: 'Unfollow success',
-  REFRESH_TOKEN_SUCCESS: 'Refresh token success'
+  REFRESH_TOKEN_SUCCESS: 'Refresh token success',
+  GMAIL_NOT_VERIFIED: 'Gmail not verified'
 } as const
