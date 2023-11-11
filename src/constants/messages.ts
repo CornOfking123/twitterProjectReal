@@ -53,8 +53,12 @@ export const USERS_MESSAGES = {
   LOCATION_LENGTH_MUST_BE_LESS_THAN_200: 'Location length must be less than 200',
   WEBSITE_MUST_BE_A_STRING: 'Website must be a string',
   WEBSITE_LENGTH_MUST_BE_LESS_THAN_200: 'Website length must be less than 200',
-  USERNAME_MUST_BE_A_STRING: 'Username must be a string',
+  USERNAME_MUST_BE_A_STRING:
+    'Username must be a string and length must be 4 - 15, and contain only letters, numbers, and underscores, not only numbers',
   USERNAME_LENGTH_MUST_BE_LESS_THAN_50: 'Username length must be less than 50',
+  USERNAME_IS_INVALID:
+    'Username must be a string and length must be 4 - 15, and contain only letters, numbers, and underscores, not only numbers',
+  USERNAME_ALREADY_EXISTS: 'Username already exists',
   UPDATE_ME_SUCCESS: 'Update me success',
   GET_PROFILE_SUCCESS: 'Get profile success',
   IMAGE_URL_MUST_BE_A_STRING: 'Image url must be a string',

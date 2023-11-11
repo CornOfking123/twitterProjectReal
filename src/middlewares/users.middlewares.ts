@@ -11,6 +11,7 @@ import { TransformStreamDefaultController } from 'stream/web'
 import { UserVerifyStatus } from '~/constants/enums'
 import HTTP_STATUS from '~/constants/httpStatus'
 import { USERS_MESSAGES } from '~/constants/messages'
+import { REGEX_USERNAME } from '~/constants/regex'
 import { ErrorWithStatus } from '~/models/Errors'
 import { TokenPayload } from '~/models/requests/User.requests'
 import databaseService from '~/services/database.services'
@@ -515,12 +516,21 @@ export const updateMeValidator = validate(
           errorMessage: USERS_MESSAGES.USERNAME_MUST_BE_A_STRING ////messages.ts thêm USERNAME_MUST_BE_A_STRING: 'Username must be a string'
         },
         trim: true,
-        isLength: {
-          options: {
-            min: 1,
-            max: 50
-          },
-          errorMessage: USERS_MESSAGES.USERNAME_LENGTH_MUST_BE_LESS_THAN_50 //messages.ts thêm USERNAME_LENGTH_MUST_BE_LESS_THAN_50: 'Username length must be less than 50'
+        //bỏ isLength,vì ta có regex rồi
+        custom: {
+          options: async (value, { req }) => {
+            if (REGEX_USERNAME.test(value) === false) {
+              throw new Error(USERS_MESSAGES.USERNAME_IS_INVALID) //trong message USERNAME_IS_INVALID: 'Username must be a string and length must be 4 - 15, and contain only letters, numbers, and underscores, not only numbers'
+            }
+            //tìm user bằng username
+            const user = await databaseService.users.findOne({
+              username: value
+            })
+            //nếu username đã tồn tại thì throw error
+            if (user) {
+              throw new Error(USERS_MESSAGES.USERNAME_ALREADY_EXISTS) //trong message USERNAME_ALREADY_EXISTS: 'Username already exists'
+            }
+          }
         }
       },
       avatar: imageSchema,
